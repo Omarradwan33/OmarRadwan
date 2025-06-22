@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record id="hospital_patient_report" model="ir.actions.report">
+            <field name="name">Patient Report</field>
+            <field name="model">hospital.patient</field>
+            <field name="binding_model_id" ref="model_hospital_patient"/>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="model_hospital_patient" />
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Patient Report - %s' % (object.name)</field>
+            <field name="report_name">hospital.patient_report_template</field>
+        </record>
+
+
+    <template id="patient_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout"> <!--or external-->
+                <t t-foreach="docs" t-as="rec">
+                    <div><h1 style="font-family:'sans-serif'; text-align: center; margin:0; padding:0;">Patient Report</h1></div>
+                    <style>
+                        body {
+                            font-family: 'Helvetica Neue', Arial, sans-serif;
+                            color: #D5B9CD;
+                            line-height: 1.5;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 15px 0 30px 0;
+                            page-break-inside: avoid;
+                        }
+                        table th {
+                            background-color: #875A7B;
+                            color: white;
+                            padding: 10px 12px;
+                            text-align: center;
+                            font-weight: 600;
+                        }
+                        table td {
+                            padding: 8px 12px;
+                            border: 1px solid #e0e0e0;
+                            vertical-align: top;
+                            text-align: center;
+                        }
+                        div{
+                        padding: 8px 12px;
+                        margin: 15px 20px;
+
+                        }
+                    </style>
+
+                    <div class="image-container" style="margin: 20px 0; text-align: center;">
+                        <!-- The key image tag -->
+                        <img t-if="rec.img"
+                             t-att-src="'data:image/png;base64,' + rec.img.decode('utf-8')"
+                             style="max-width: 100%; max-height: 150px;"/>
+
+                        <!-- Fallback if no image -->
+                        <div t-if="not rec.img" style="color: #999;">
+                            <h1>No image available</h1>
+                        </div>
+                    </div>
+
+                    <div>
+                        <table>
+                            <thead>
+                               <th colspan="4">Personal Information</th>
+                            </thead>
+                            <tbody>
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Age</th>
+                                        <th>Gender</th>
+                                        <th>Date Of Birth</th>
+                                    </tr>
+                                    <tr>
+                                        <td><t t-esc="rec.name"/></td>
+                                        <td><t t-esc="rec.age"/></td>
+                                        <td><t t-esc="rec.gender"/></td>
+                                        <td><t t-esc="rec.date_of_birth"/></td>
+                                    </tr>
+                                </table>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div>
+                        <table>
+                            <thead>
+                               <th colspan="4">Additional Information</th>
+                            </thead>
+                            <tbody>
+                            <table>
+                                    <tr>
+                                       <th>Country</th>
+                                       <th>Phone</th>
+                                       <th>Email</th>
+                                       <th>Telephone</th>
+                                       <th>Doctors</th>
+                                       <th>Department</th>
+                                    </tr>
+                                    <tr>
+                                        <td><t t-esc="rec.country"/></td>
+                                        <td><t t-esc="rec.phone"/></td>
+                                        <td><t t-esc="rec.email"/></td>
+                                        <td><t t-esc="rec.telephone"/></td>
+                                        <td><t t-esc="rec.doctor_ids.name"/></td>
+                                        <td><t t-esc="rec.department_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div t-if="rec.death_registration" >
+                        <table>
+                            <thead>
+                               <th colspan="4">Hospital Information</th>
+                            </thead>
+                            <tbody>
+                            <table>
+                                    <tr>
+                                       <th>Blood Type</th>
+                                       <th>Death Registration</th>
+                                       <th>Date Of Death</th>
+                                    </tr>
+                                    <tr>
+                                        <td><t t-esc="rec.blood_type"/></td>
+                                        <td><t t-esc="rec.death_registration"/></td>
+                                        <td><t t-esc="rec.date_of_death"/></td>
+                                    </tr>
+                                </table>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+                    <div>
+                        <table>
+                            <thead>
+                               <th colspan="4">Clinical Assessment</th>
+                            </thead>
+                            <tbody>
+                            <table>
+                                    <tr>
+                                       <th>Height</th>
+                                       <th>Weight</th>
+                                       <th>Blood Pressure</th>
+                                       <th>Spo2</th>
+                                       <th>Symptoms</th>
+                                       <th>Diagnosis</th>
+                                    </tr>
+                                    <tr>
+                                        <td><t t-esc="rec.height"/></td>
+                                        <td><t t-esc="rec.weight"/></td>
+                                        <td><t t-esc="rec.blood_pressure"/></td>
+                                        <td><t t-esc="rec.spo2"/></td>
+                                        <td><t t-esc="rec.symptoms"/></td>
+                                        <td><t t-esc="rec.diagnosis"/></td>
+                                    </tr>
+                                </table>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+    </data>
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<notebook>-->
+<!--                            <page string="General information">-->
+<!--                                <form>-->
+<!--                                    <sheet>-->
+<!--                                        <group>-->
+<!--                                          <field name="street"/>-->
+<!--                                          <field name="city"/>-->
+<!--                                          <field name="state"/>-->
+<!--                                          <field name="country"/>-->
+<!--                                        </group>-->
+<!--                                        <group>-->
+<!--                                            <field name="telephone"/>-->
+<!--                                            <field name="phone"/>-->
+<!--                                            <field name="email"/>-->
+<!--                                            <field name="government_identity"/>-->
+<!--                                            <field name="marital_status"/>-->
+<!--                                        </group>-->
+<!--                                    </sheet>-->
+<!--                                </form>-->
+
+<!--                            </page>-->
+
+<!--                             <separator />-->
+
+<!--                             <page string="Hospital Info">-->
+<!--                                         <group>-->
+<!--                                             <field name="blood_type"/>-->
+<!--                                             <field name="death_registration"/>-->
+<!--                                             <field name="date_of_death"/>-->
+<!--                                         </group>-->
+<!--                             </page>-->
+<!--                             <separator />-->
+
+<!--                             <page string="Clinical Assessment">-->
+
+<!--                                         <group>-->
+<!--                                             <field name="height"/>-->
+<!--                                             <field name="weight"/>-->
+<!--                                             <field name="blood_pressure"/>-->
+<!--                                             <field name="spo2"/>-->
+<!--                                             <field name="symptoms"/>-->
+<!--                                             <field name="diagnosis"/>-->
+<!--                                         </group>-->
+<!--                             </page>-->
+
+
+<!--                        </notebook>-->

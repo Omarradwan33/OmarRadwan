@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+     <record id="view_hospital_doctors_tree" model="ir.ui.view">
+            <field name="name">doctors.tree</field>
+            <field name="model">doctors</field>
+            <field name="arch" type="xml">
+                <tree string="Doctors">
+                    <field name="first_name" optional="hide"/>
+                    <field name="last_name" optional="hide"/>
+                    <field name="name" />
+                </tree>
+            </field>
+     </record>
+
+
+    <record id="view_hospital_doctors_form" model="ir.ui.view">
+            <field name="name">doctors.form</field>
+            <field name="model">doctors</field>
+            <field name="arch" type="xml">
+                <form string="Doctors">
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <group>
+                            <group>
+                               <field name="first_name"/>
+                                <field name="last_name"/>
+                                <field name="name"/>
+                                <field name="specialization"/>
+                                <field name="department_id"/>
+                                <field name="patient_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </sheet>
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" groups="base.group_user"/>-->
+<!--                        <field name="message_ids"/>-->
+<!--                    </div>-->
+
+                </form>
+            </field>
+     </record>
+
+    <record id="action_hospital_doctors" model="ir.actions.act_window">
+            <field name="name">Doctors</field>
+            <field name="res_model">doctors</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_ids" eval="[Command.clear(),
+                          (0,0,{'view_mode':'tree', 'view_id': ref('view_hospital_doctors_tree')}),
+                          (0,0,{'view_mode':'form', 'view_id': ref('view_hospital_doctors_form')})]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new patient
+                </p>
+            </field>
+    </record>
+
+
+
+
+     <!--Kanban view-->
+    <record id="view_doctor_kanban" model="ir.ui.view">
+        <field name="name">doctor.kanban</field>
+        <field name="model">doctors</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="department_id">
+                <field name="department_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('doctors', 'image', record.id.raw_value)"
+                                     class="oe_kanban_image" alt="Doctor Image"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong><field name="name"/></strong>
+                                <div>Specialization: <field name="specialization"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>
